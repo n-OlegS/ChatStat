@@ -41,5 +41,8 @@ except FileNotFoundError:
 
 clean_up_file(file, clean_file)
 
+file.close()
+clean_file.close()
+
 #test
 #хай бич король)
