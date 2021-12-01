@@ -1,4 +1,4 @@
-
+# немного говно кода
 def count_words():
     line = input()
     i = 0
