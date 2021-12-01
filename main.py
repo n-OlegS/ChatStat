@@ -1,3 +1,4 @@
+from modules import *
 import os.path
 
 path = str(input("Enter path to text file: "))
@@ -9,28 +10,32 @@ except FileNotFoundError:
     print("File not found.")
     quit()
 
+
 def clean_up_file(raw_file, cleaned_file):
-    for line in raw_file.readlines():
+    i = 0
+
+    data = raw_file.readlines()
+    clean_file_data = cleaned_file.readlines()
+
+    for _ in data:
+        print(i)
+
+        line = data[i]
         new_line = line[:line.find(":")]
         newer_line = new_line[:new_line.find(":")]
+        final_line = newer_line + "\n"
 
-        cleaned_file
+        clean_file_data[i] = final_line
 
+        i += 1
+
+
+clean_path = os.path.dirname(os.path.abspath("clean.txt")) + "/clean.txt"
 
 try:
-    clean_path = os.path.dirname(os.path.abspath("clean.txt"))
     clean_file = open(clean_path, 'r')
 except FileNotFoundError:
-    clean_file = open("clean.txt", "x")
+    print("Creating  new clean file...")
+    clean_file = open(clean_path, "x")
 
-
-
-
-def count_lines():
-    line_count = 0
-
-    for line in file.readlines():
-        line_count += 1
-
-    return(line_count)
-
+#clean_up_file(file, clean_file)
