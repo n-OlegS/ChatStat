@@ -2,7 +2,6 @@ from modules import *
 import os.path
 
 path = str(input("Enter path to text file: "))
-c = 0
 
 try:
     file = open(path, 'r')
@@ -18,8 +17,6 @@ def clean_up_file(raw_file, cleaned_file):
     clean_file_data = cleaned_file.readlines()
 
     for _ in data:
-        print(i)
-
         line = data[i]
         new_line = line[line.find(":") + 1:]
         newer_line = new_line[(new_line.find(":") + 2):]
@@ -27,7 +24,6 @@ def clean_up_file(raw_file, cleaned_file):
         try:
             clean_file_data[i] = newer_line
         except IndexError:
-            print("Index error, creating new line")
             cleaned_file.write(str(newer_line))
 
         i += 1
