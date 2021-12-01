@@ -21,15 +21,14 @@ def clean_up_file(raw_file, cleaned_file):
         print(i)
 
         line = data[i]
-        new_line = line[:line.find(":")]
-        newer_line = new_line[:new_line.find(":")]
-        final_line = newer_line + "\n"
+        new_line = line[line.find(":") + 1:]
+        newer_line = new_line[(new_line.find(":") + 2):]
 
         try:
-            clean_file_data[i] = final_line
+            clean_file_data[i] = newer_line
         except IndexError:
             print("Index error, creating new line")
-            cleaned_file.write(str(final_line))
+            cleaned_file.write(str(newer_line))
 
         i += 1
 
@@ -37,9 +36,11 @@ def clean_up_file(raw_file, cleaned_file):
 clean_path = os.path.dirname(os.path.abspath("clean.txt")) + "/clean.txt"
 
 try:
-    clean_file = open(clean_path, 'r')
+    clean_file = open(clean_path, 'r+')
 except FileNotFoundError:
     print("Creating  new clean file...")
     clean_file = open(clean_path, "x")
+    clean_file.close()
+    clean_file = open(clean_path, "r+")
 
 clean_up_file(file, clean_file)
