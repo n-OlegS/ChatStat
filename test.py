@@ -8,7 +8,7 @@ def count_words():
         else:
             continue
     ans = i + 1
-    return(ans)
+    return ans
 
 
 count_words()
