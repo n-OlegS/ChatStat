@@ -1,5 +1,5 @@
-#from modules import *
-import os.path
+from modules import *
+import os.path, time
 
 path = str(input("Enter path to text file: "))
 
