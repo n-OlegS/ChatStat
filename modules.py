@@ -33,4 +33,4 @@ def common_word(file):
 
     return words
 
-print(common_word(open("/Users/oleg/PycharmProjects/chatstat/ChatStat/clean.txt", "r")))
+#print(common_word(open("/Users/oleg/PycharmProjects/chatstat/ChatStat/clean.txt", "r")))
