@@ -1,9 +1,13 @@
-from emoji import  *
 
-def count_words(path):
-    a = open(path, 'r')
-    text = a.read()
-    return text.count(' ') + 1
-    a.close()
 
-print(count_words('/Users/ula/PycharmProjects/Projectneolegs/ChatStat/clean.txt'))
+
+a = {}
+max_count = 0
+max_value = ''
+
+for i in range(len(a)):
+    key = list(a)[i]
+
+    if a[key] > max_count:
+        max_value = list(a)[i]
+        max_count = a[key]

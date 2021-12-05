@@ -1,7 +1,7 @@
 from emoji import UNICODE_EMOJI_ENGLISH
 
-def raw_char(input_file):
-    return (len(input_file))
+def raw_char(file):
+    return (len(file))
 
 def count_lines(file):
     line_count = 0
@@ -11,26 +11,44 @@ def count_lines(file):
 
     return(line_count)
 
+def count_words(file):
+    a = file
+    text = a.read()
+    return text.count(' ') + 1
+    a.close()
+
 def common_word(file):
+    global words
     words = {}
 
     text = file.read()
 
     def add_word(word):
-        if word in words:
-            words[word] += 1
-        else:
-            words[word] = 1
+        if word not in ["-", " ", ""]:
+            if word in words:
+                words[word] += 1
+            else:
+                words[word] = 1
 
     acc = ""
 
     for letter in text:
-        if letter in [" ", "\n", ".", ",", "!", ":"] or letter in UNICODE_EMOJI_ENGLISH:
+        if letter in [" ", "\n", ".", ",", "!", ":", ')', '('] or letter in UNICODE_EMOJI_ENGLISH:
             add_word(acc)
             acc = ""
         else:
             acc += letter
 
-    return words
+    max_count = 0
+    max_value = ''
 
-#print(common_word(open("/Users/oleg/PycharmProjects/chatstat/ChatStat/clean.txt", "r")))
+    for i in range(len(words)):
+        key = list(words)[i]
+
+        if words[key] > max_count:
+            max_value = list(words)[i]
+            max_count = words[key]
+    return 'Word: ' + max_value + '\nCount: ' + str(max_count)
+
+print(common_word(open("/Users/ula/PycharmProjects/Projectneolegs/ChatStat/clean.txt", "r")))
+
