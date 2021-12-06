@@ -1,4 +1,4 @@
-#from modules import *
+from modules import *
 import os.path
 
 path = str(input("Enter path to text file: "))
@@ -30,6 +30,7 @@ def clean_up_file(cleaned_file):
             cleaned_file.write(str(newer_line))
 
         i += 1
+
 
 def gen_stat_file(final_stat_file):
     i = 0
@@ -84,12 +85,12 @@ except FileNotFoundError:
 
 data = file.readlines()
 
-clean_up_file(file, clean_file)
-gen_stat_file(file, stat_file)
+clean_up_file(clean_file)
+gen_stat_file(stat_file)
 
 file.close()
 clean_file.close()
 stat_file.close()
 
-#test
-#хай бич король)
+# test
+# хай бич король)
