@@ -83,4 +83,10 @@ def standarize_stat(file, line_num):
         line = line[i + 1:]
         i = line.find(".")
         month = line[:i]
-        year = line[i + 1:]
+        year = line[i + 1:line.find(",")]
+    else:
+        month = line[:i]
+        line = line[i + 1:]
+        i = line.find("/")
+        day = line[:i]
+        year = line[i + 1:line.find(",")]
