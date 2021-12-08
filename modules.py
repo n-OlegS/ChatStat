@@ -74,9 +74,19 @@ def standarize_stat(file, line_num):
     while line[i] not in [".", "/"]:
         i += 1
 
-    day = 0
-    month = 0
-    year = 0
+    user = line[line.find(" - ") + 3:]
+
+    if line[line.find(" - ") - 2:line.find(" - ")] == "PM":
+        hour = int(line[line.find(" "):line.find(":")]) + 12
+        minute = int(line[line.find(":") + 1:line.find(" PM")])
+
+    elif line[line.find(" - ") - 2:line.find(" - ")] == "AM":
+        hour = int(line[line.find(" "):line.find(":")])
+        minute = int(line[line.find(":") + 1:line.find(" AM")])
+    else:
+        minute = line[line.find(" - ") - 2:line.find(" - ")]
+        hour = line[line.find(" - ") - 5:line.find(" - ") - 3]
+
 
     if line[i] == ".":
         day = line[:i]
@@ -90,3 +100,5 @@ def standarize_stat(file, line_num):
         i = line.find("/")
         day = line[:i]
         year = line[i + 1:line.find(",")]
+
+    return [minute, hour, day, month, year, user]

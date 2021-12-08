@@ -92,5 +92,3 @@ file.close()
 clean_file.close()
 stat_file.close()
 
-# test
-# хай бич король)
