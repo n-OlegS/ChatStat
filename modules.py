@@ -60,21 +60,25 @@ def search_word(file, s_word):
     return "Word: " + s_word + "\nAmount: " + str(text.count(s_word))
 
 
-def standarize_stat(file, line_num):
+def standarize_stat(file, line_num, inp_line):
     data = file.readlines()
     i = 0
-    line = ""
 
-    for line_check in data:
-        if i == line_num - 1:
-            line = line_check
-        i += 1
+    if inp_line != -1:
+        line = inp_line
+    else:
+        line = ""
+
+        for line_check in data:
+            if i == line_num - 1:
+                line = line_check
+            i += 1
 
     i = 0
     while line[i] not in [".", "/"]:
         i += 1
 
-    user = line[line.find(" - ") + 3:]
+    user = line[line.find(" - ") + 3:line.find("\n")]
 
     if line[line.find(" - ") - 2:line.find(" - ")] == "PM":
         hour = int(line[line.find(" "):line.find(":")]) + 12
@@ -102,3 +106,23 @@ def standarize_stat(file, line_num):
         year = line[i + 1:line.find(",")]
 
     return [minute, hour, day, month, year, user]
+
+def messages_per_user(file):
+    mpu = {}
+    i = 0
+    for line in file.readlines():
+        try:
+            cur_sender = standarize_stat(file, i, line)[5]
+        except IndexError:
+            print("error")
+            continue
+        if cur_sender in mpu:
+            mpu[cur_sender] += 1
+        else:
+            mpu[cur_sender] = 1
+
+        i += 1
+
+    return mpu
+
+print(messages_per_user(open("/Users/oleg/PycharmProjects/chatstat/ChatStat/stat.txt", "r")))

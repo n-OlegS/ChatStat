@@ -1,4 +1,4 @@
-from modules import *
+#from modules import *
 import os.path
 
 path = str(input("Enter path to text file: "))
