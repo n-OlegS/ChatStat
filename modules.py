@@ -2,7 +2,11 @@ from emoji import UNICODE_EMOJI_ENGLISH
 
 
 def raw_char(file):
-    return (len(file))
+    l = 0
+    for line in file:
+        l += len(line)
+
+    return l
 
 
 def count_lines(file):
@@ -125,4 +129,13 @@ def messages_per_user(file):
 
     return mpu
 
-print(messages_per_user(open("/Users/oleg/PycharmProjects/chatstat/ChatStat/stat.txt", "r")))
+stat_file = open("/Users/oleg/PycharmProjects/chatstat/ChatStat/stat.txt", "r")
+clean_file = open("/Users/oleg/PycharmProjects/chatstat/ChatStat/clean.txt", "r")
+
+#print(str(raw_char(clean_file)) + "\n" * 2)
+#print(str(count_words(clean_file)) + "\n" * 2)
+#print(str(common_word(clean_file)) + "\n" * 2)
+#print(messages_per_user(open("/Users/oleg/PycharmProjects/chatstat/ChatStat/stat.txt", "r")))
+
+clean_file.close()
+stat_file.close()
