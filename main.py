@@ -64,8 +64,8 @@ def gen_stat_file(final_stat_file):
         i += 1
 
 
-clean_path = os.path.dirname(os.path.abspath("clean.txt")) + "/clean.txt"
-stat_path = os.path.dirname(os.path.abspath("stat.txt")) + "/stat.txt"
+clean_path = os.path.dirname(os.path.abspath("res/clean.txt")) + "/clean.txt"
+stat_path = os.path.dirname(os.path.abspath("res/stat.txt")) + "/stat.txt"
 
 try:
     clean_file = open(clean_path, 'r+')

@@ -129,8 +129,8 @@ def messages_per_user(file):
 
     return mpu
 
-stat_file = open("/Users/oleg/PycharmProjects/chatstat/ChatStat/stat.txt", "r")
-clean_file = open("/Users/oleg/PycharmProjects/chatstat/ChatStat/clean.txt", "r")
+stat_file = open("/ChatStat/res/stat.txt", "r")
+clean_file = open("/ChatStat/res/clean.txt", "r")
 
 #print(str(raw_char(clean_file)) + "\n" * 2)
 #print(str(count_words(clean_file)) + "\n" * 2)
