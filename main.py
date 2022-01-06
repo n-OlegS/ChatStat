@@ -1,4 +1,4 @@
-#from modules import *
+from modules import *
 import os.path
 
 path = str(input("Enter path to text file: "))
@@ -48,7 +48,8 @@ def gen_stat_file(final_stat_file):
         skip = False
         for test_validity in range(5):
             try:
-                if not final_line[test_validity] in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", "/"]:
+                if not final_line[test_validity] in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", "/"]\
+                        or final_line[:3] == "...":
                     skip = True
             except IndexError:
                 skip = True
@@ -59,7 +60,7 @@ def gen_stat_file(final_stat_file):
             except IndexError:
                 final_stat_file.write(str(final_line) + "\n")
         else:
-            print("Rejected:", final_line[:15] + "...")
+            print("Rejected", str(i) + ":", final_line[:15] + "...")
 
         i += 1
 
@@ -87,6 +88,7 @@ data = file.readlines()
 
 clean_up_file(clean_file)
 gen_stat_file(stat_file)
+write_csv()
 
 file.close()
 clean_file.close()

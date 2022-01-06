@@ -1,3 +1,7 @@
+import csv, datetime
+import plotly.offline as py
+import plotly.graph_objs as go
+
 from emoji import UNICODE_EMOJI_ENGLISH
 
 
@@ -65,12 +69,12 @@ def search_word(file, s_word):
 
 
 def standarize_stat(file, line_num, inp_line):
-    data = file.readlines()
     i = 0
 
     if inp_line != -1:
         line = inp_line
     else:
+        data = file.readlines()
         line = ""
 
         for line_check in data:
@@ -95,6 +99,8 @@ def standarize_stat(file, line_num, inp_line):
         minute = line[line.find(" - ") - 2:line.find(" - ")]
         hour = line[line.find(" - ") - 5:line.find(" - ") - 3]
 
+    if hour == 24:
+        hour = 0
 
     if line[i] == ".":
         day = line[:i]
@@ -109,7 +115,8 @@ def standarize_stat(file, line_num, inp_line):
         day = line[:i]
         year = line[i + 1:line.find(",")]
 
-    return [minute, hour, day, month, year, user]
+    return [year, month, day, hour, minute, user]
+
 
 def messages_per_user(file):
     mpu = {}
@@ -129,13 +136,79 @@ def messages_per_user(file):
 
     return mpu
 
-stat_file = open("/ChatStat/res/stat.txt", "r")
-clean_file = open("/ChatStat/res/clean.txt", "r")
 
-#print(str(raw_char(clean_file)) + "\n" * 2)
-#print(str(count_words(clean_file)) + "\n" * 2)
-#print(str(common_word(clean_file)) + "\n" * 2)
-#print(messages_per_user(open("/Users/oleg/PycharmProjects/chatstat/ChatStat/stat.txt", "r")))
+def write_csv():
+    with open("res/data.csv", "w") as csv_file, open("res/stat.txt", "r") as stat_file:
+        writer = csv.writer(csv_file)
+        writer.writerow(['Month', 'Day', 'Year', "Hour", "Minute", "User"])
 
-clean_file.close()
-stat_file.close()
+        for line in stat_file.readlines():
+            data = standarize_stat(0, 0, line)
+            writer.writerow(data)
+
+
+def graph_mpdow():
+    mon, tue, wed, thur, fri, sat, sun = 0, 0, 0, 0, 0, 0, 0
+    try:
+        with open("res/stat.txt", "r") as stat_file:
+            for line in stat_file:
+                l = standarize_stat(0, 0, line)
+                dow = datetime.date(int(l[0]), int(l[1]), int(l[2])).weekday()
+
+                if dow == 0:
+                    mon += 1
+                elif dow == 1:
+                    tue += 1
+                elif dow == 2:
+                    wed += 1
+                elif dow == 3:
+                    thur += 1
+                elif dow == 4:
+                    fri += 1
+                elif dow == 5:
+                    sat += 1
+                else:
+                    sun += 1
+
+        trace = go.Bar(x=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+                       y=[mon, tue, wed, thur, fri, sat, sun])
+        py.plot([trace])
+    except:
+        none = None
+
+def getKeyList(d):
+    keys = []
+    for key in d.keys():
+        keys.append(key)
+    return keys
+
+def getValueList(d):
+    values = []
+    for value in d.values():
+        values.append(value)
+    return values
+
+def mph():
+    try:
+        with open("res/stat.txt", "r") as stat_file:
+            hours = {}
+            for i in range(24):
+                hours[str(i)] = 0
+
+            for line in stat_file:
+                new_line = str(int(standarize_stat(0, 0, line)[3]))
+                hours[new_line] += 1
+
+            print(hours)
+            trace = go.Bar(x=getKeyList(hours),
+                           y=getValueList(hours))
+            py.plot([trace])
+    except:
+        i = 0
+
+graph_mpdow()
+#mph()
+# print(str(raw_char(clean_file)) + "\n" * 2)
+# print(str(count_words(clean_file)) + "\n" * 2)
+# print(str(common_word(clean_file)) + "\n" * 2)
+# print(messages_per_user(open("/Users/oleg/PycharmProjects/chatstat/ChatStat/stat.txt", "r")))
