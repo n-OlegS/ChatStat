@@ -176,11 +176,13 @@ def graph_mpdow():
     except:
         none = None
 
+
 def getKeyList(d):
     keys = []
     for key in d.keys():
         keys.append(key)
     return keys
+
 
 def getValueList(d):
     values = []
@@ -188,26 +190,50 @@ def getValueList(d):
         values.append(value)
     return values
 
-def mph():
+
+def graph_mph():
+    try:
+        stat_file = open("res/stat.txt", "r")
+        hours = {}
+        for i in range(24):
+            hours[str(i)] = 0
+
+        for line in stat_file:
+            new_line = str(int(standarize_stat(0, 0, line)[3]))
+            hours[new_line] += 1
+
+        trace = go.Bar(x=getKeyList(hours),
+                       y=getValueList(hours))
+        py.plot([trace])
+
+    except FileNotFoundError:
+        print("Error")
+
+def graph_mpday():
     try:
         with open("res/stat.txt", "r") as stat_file:
-            hours = {}
-            for i in range(24):
-                hours[str(i)] = 0
+            dates = {}
 
             for line in stat_file:
-                new_line = str(int(standarize_stat(0, 0, line)[3]))
-                hours[new_line] += 1
+                new_line = str(standarize_stat(0, 0, line)[0]) + "-" + str(standarize_stat(0, 0, line)[1]) + "-" + str(
+                    standarize_stat(0, 0, line)[2])
 
-            print(hours)
-            trace = go.Bar(x=getKeyList(hours),
-                           y=getValueList(hours))
+                if new_line not in dates:
+                    dates[new_line] = 1
+                else:
+                    dates[new_line] += 1
+
+            print(dates)
+            trace = go.Bar(x=getKeyList(dates),
+                           y=getValueList(dates))
             py.plot([trace])
     except:
         i = 0
 
-graph_mpdow()
-#mph()
+
+
+#graph_mpday()
+#graph_mph()
 # print(str(raw_char(clean_file)) + "\n" * 2)
 # print(str(count_words(clean_file)) + "\n" * 2)
 # print(str(common_word(clean_file)) + "\n" * 2)
