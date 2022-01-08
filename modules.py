@@ -5,6 +5,61 @@ import plotly.graph_objs as go
 from emoji import UNICODE_EMOJI_ENGLISH
 
 
+def gen_clean_file(data, cleaned_file):
+    i = 1
+
+    clean_file_data = cleaned_file.readlines()
+
+    for _ in data:
+        try:
+            line = data[i]
+        except IndexError:
+            break
+
+        new_line = line[line.find(":") + 1:]
+        newer_line = new_line[(new_line.find(":") + 2):]
+
+        try:
+            clean_file_data[i] = newer_line
+        except IndexError:
+            cleaned_file.write(str(newer_line))
+
+        i += 1
+
+
+def gen_stat_file(data, final_stat_file):
+    i = 0
+
+    stat_file_data = final_stat_file.readlines()
+
+    for _ in data:
+        line = data[i]
+        final_line = ""
+        first = line.find(":")
+        final_line += line[:first] + ":"
+        new_line = line[first + 1:]
+        final_line += new_line[:new_line.find(":")]
+
+        skip = False
+        for test_validity in range(5):
+            try:
+                if not final_line[test_validity] in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", "/"] \
+                        or final_line[:3] == "...":
+                    skip = True
+            except IndexError:
+                skip = True
+
+        if not skip:
+            try:
+                stat_file_data[i] = final_line + "\n"
+            except IndexError:
+                final_stat_file.write(str(final_line) + "\n")
+        else:
+            print("Rejected", str(i) + ":", final_line[:15] + "...")
+
+        i += 1
+
+
 def raw_char(file):
     l = 0
     for line in file:
@@ -209,6 +264,7 @@ def graph_mph():
     except FileNotFoundError:
         print("Error")
 
+
 def graph_mpday():
     try:
         with open("res/stat.txt", "r") as stat_file:
@@ -230,10 +286,8 @@ def graph_mpday():
     except:
         i = 0
 
-
-
-#graph_mpday()
-#graph_mph()
+# graph_mpday()
+# graph_mph()
 # print(str(raw_char(clean_file)) + "\n" * 2)
 # print(str(count_words(clean_file)) + "\n" * 2)
 # print(str(common_word(clean_file)) + "\n" * 2)
