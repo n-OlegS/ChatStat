@@ -1,3 +1,4 @@
 res/
 .gitignore
+test.py
 temp-plot.html

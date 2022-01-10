@@ -245,25 +245,70 @@ def getValueList(d):
         values.append(value)
     return values
 
+def addLists(x, y):
+    if not len(x) == len(y):
+        print("Addlists Error, terminating...")
+        quit()
+    else:
+        c = []
+        for i in range(len(x)):
+            c.append(int(x[i]) + int(y[i]))
+
+        return c
 
 def graph_mph():
     try:
         stat_file = open("res/stat.txt", "r")
-        hours = {}
-        for i in range(24):
-            hours[str(i)] = 0
+    except:
+        return
 
-        for line in stat_file:
-            new_line = str(int(standarize_stat(0, 0, line)[3]))
-            hours[new_line] += 1
+    users = {}
+    data = []
 
-        trace = go.Bar(x=getKeyList(hours),
-                       y=getValueList(hours))
-        py.plot([trace])
+    for line in stat_file:
+        stats = standarize_stat(0, 0, line)
+        hour = int(stats[3])
+        user = str(stats[5])
 
-    except FileNotFoundError:
-        print("Error")
+        while hour >= 24: hour -= 24
+        hour = str(hour)
 
+        if user not in users:
+            users[user] = {}
+            for i in range(24):
+                users[user][str(i)] = 0
+
+        if hour not in users[user]:
+            users[user][hour] = 1
+        else:
+            users[user][hour] += 1
+
+    base = [0] * 24
+
+    for i in getKeyList(users):
+        data.append(go.Bar(
+            name=i,
+            x=getKeyList(users[i]),
+            y=getValueList(users[i]),
+            base=base,
+            offsetgroup=0
+        ))
+
+        print(len(base))
+        print(len(getValueList(users[i])))
+        print(users)
+        base = addLists(base, getValueList(users[i]))
+
+    fig = go.Figure(
+        data,
+        layout=go.Layout(
+            title="Messages per hour of day",
+            yaxis_title="Number of messges"
+        )
+    )
+
+    fig.show()
+    stat_file.close()
 
 def graph_mpday():
     try:
@@ -285,6 +330,23 @@ def graph_mpday():
             py.plot([trace])
     except:
         i = 0
+
+"""def graph_mpd():
+    try:
+        stat_file = open("res/stat.txt", "r")
+    except:
+        return
+    
+    for line in stat_file:
+        stats = standarize_stat(0, 0, line)
+        date = str(standarize_stat(0, 0, line)[0]) + "-" + str(standarize_stat(0, 0, line)[1]) + "-" + str(
+                    standarize_stat(0, 0, line)[2])
+        user = str(stats[5])
+        
+    users = {}
+    data = []
+    
+    if user not in users:"""
 
 # graph_mpday()
 # graph_mph()
