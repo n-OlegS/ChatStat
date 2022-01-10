@@ -201,36 +201,55 @@ def write_csv():
             data = standarize_stat(0, 0, line)
             writer.writerow(data)
 
-
 def graph_mpdow():
-    mon, tue, wed, thur, fri, sat, sun = 0, 0, 0, 0, 0, 0, 0
     try:
-        with open("res/stat.txt", "r") as stat_file:
-            for line in stat_file:
-                l = standarize_stat(0, 0, line)
-                dow = datetime.date(int(l[0]), int(l[1]), int(l[2])).weekday()
-
-                if dow == 0:
-                    mon += 1
-                elif dow == 1:
-                    tue += 1
-                elif dow == 2:
-                    wed += 1
-                elif dow == 3:
-                    thur += 1
-                elif dow == 4:
-                    fri += 1
-                elif dow == 5:
-                    sat += 1
-                else:
-                    sun += 1
-
-        trace = go.Bar(x=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-                       y=[mon, tue, wed, thur, fri, sat, sun])
-        py.plot([trace])
+        stat_file = open("res/stat.txt", "r")
     except:
-        none = None
+        return
 
+    users = {}
+    data = []
+    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
+    for line in stat_file:
+        stats = standarize_stat(0, 0, line)
+        user = stats[5]
+        dow = datetime.date(int(stats[0]), int(stats[1]), int(stats[2])).weekday()
+
+        if user not in users:
+            users[user] = {}
+            for i in range(7):
+                users[user][i] = 0
+
+        if dow not in users[user]:
+            users[user][dow] = 1
+        else:
+            users[user][dow] += 1
+
+    base = [0] * 7
+
+    for user in getKeyList(users):
+        data.append(go.Bar(
+            name=user,
+            x=days,
+            y=getValueList(users[user]),
+            base=base,
+            offsetgroup=0
+        ))
+
+        base = addLists(base, getValueList(users[user]))
+
+    print(users)
+
+    fig = go.Figure(
+        data,
+        layout=go.Layout(
+            title="Messages per weekday",
+            yaxis_title="Message count"
+        )
+    )
+
+    fig.show()
 
 def getKeyList(d):
     keys = []
@@ -294,9 +313,6 @@ def graph_mph():
             offsetgroup=0
         ))
 
-        print(len(base))
-        print(len(getValueList(users[i])))
-        print(users)
         base = addLists(base, getValueList(users[i]))
 
     fig = go.Figure(
@@ -310,46 +326,61 @@ def graph_mph():
     fig.show()
     stat_file.close()
 
-def graph_mpday():
-    try:
-        with open("res/stat.txt", "r") as stat_file:
-            dates = {}
-
-            for line in stat_file:
-                new_line = str(standarize_stat(0, 0, line)[0]) + "-" + str(standarize_stat(0, 0, line)[1]) + "-" + str(
-                    standarize_stat(0, 0, line)[2])
-
-                if new_line not in dates:
-                    dates[new_line] = 1
-                else:
-                    dates[new_line] += 1
-
-            print(dates)
-            trace = go.Bar(x=getKeyList(dates),
-                           y=getValueList(dates))
-            py.plot([trace])
-    except:
-        i = 0
-
-"""def graph_mpd():
+def graph_mpd():
     try:
         stat_file = open("res/stat.txt", "r")
     except:
         return
-    
+
+    users = {}
+    data = []
+    dates = []
+
     for line in stat_file:
         stats = standarize_stat(0, 0, line)
         date = str(standarize_stat(0, 0, line)[0]) + "-" + str(standarize_stat(0, 0, line)[1]) + "-" + str(
                     standarize_stat(0, 0, line)[2])
         user = str(stats[5])
-        
-    users = {}
-    data = []
-    
-    if user not in users:"""
 
-# graph_mpday()
-# graph_mph()
+        if user not in users:
+            users[user] = {}
+            for date in dates:
+                users[user][date] = 0
+
+        if date not in dates:
+            dates.append(date)
+            for usr in getKeyList(users):
+                users[usr][date] = 0
+        else:
+            users[user][date] += 1
+
+    base = [0] * len(dates)
+
+    for user in getKeyList(users):
+        data.append(go.Bar(
+            name=user,
+            x=dates,
+            y=getValueList(users[user]),
+            base=base,
+            offsetgroup=0
+        ))
+
+        base = addLists(base, getValueList(users[user]))
+
+    fig = go.Figure(
+        data,
+        layout=go.Layout(
+            title="Messages per date",
+            yaxis_title="Message count"
+        )
+    )
+
+    fig.show()
+    stat_file.close()
+
+graph_mpdow()
+graph_mph()
+graph_mpd()
 # print(str(raw_char(clean_file)) + "\n" * 2)
 # print(str(count_words(clean_file)) + "\n" * 2)
 # print(str(common_word(clean_file)) + "\n" * 2)
