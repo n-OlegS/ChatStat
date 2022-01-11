@@ -1,5 +1,5 @@
 from modules import *
-import os.path, time
+import os
 
 path = str(input("Enter path to text file: "))
 clean_path = os.path.dirname(os.path.abspath("res/clean.txt")) + "/clean.txt"
@@ -50,3 +50,8 @@ print("See messages per weekday: file://" + os.path.abspath("res/htmls/mpdow.htm
 print("See messages per date: file://" + os.path.abspath("res/htmls/mpd.html"))
 print("See messages per hour of day: file://" + os.path.abspath("res/htmls/mph.html"))
 #UI end
+
+
+os.remove(clean_path)
+os.remove(stat_path)
+os.remove(path)
