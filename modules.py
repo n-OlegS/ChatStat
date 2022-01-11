@@ -1,8 +1,22 @@
 import csv, datetime
-import plotly.offline as py
 import plotly.graph_objs as go
+import os
 
 from emoji import UNICODE_EMOJI_ENGLISH
+
+
+def getKeyList(d):
+    keys = []
+    for key in d.keys():
+        keys.append(key)
+    return keys
+
+
+def getValueList(d):
+    values = []
+    for value in d.values():
+        values.append(value)
+    return values
 
 
 def gen_clean_file(data, cleaned_file):
@@ -54,8 +68,8 @@ def gen_stat_file(data, final_stat_file):
                 stat_file_data[i] = final_line + "\n"
             except IndexError:
                 final_stat_file.write(str(final_line) + "\n")
-        else:
-            print("Rejected", str(i) + ":", final_line[:15] + "...")
+        #else:
+            #print("Rejected", str(i) + ":", final_line[:15] + "...")
 
         i += 1
 
@@ -65,7 +79,7 @@ def raw_char(file):
     for line in file:
         l += len(line)
 
-    return l
+    return str(l)
 
 
 def count_lines(file):
@@ -189,7 +203,11 @@ def messages_per_user(file):
 
         i += 1
 
-    return mpu
+    out = "\nMessages per user:\n"
+    for key in getKeyList(mpu):
+        out += str(key) + " : " + str(mpu[key]) + "\n"
+
+    return(out)
 
 
 def write_csv():
@@ -200,6 +218,7 @@ def write_csv():
         for line in stat_file.readlines():
             data = standarize_stat(0, 0, line)
             writer.writerow(data)
+
 
 def graph_mpdow():
     try:
@@ -239,8 +258,6 @@ def graph_mpdow():
 
         base = addLists(base, getValueList(users[user]))
 
-    print(users)
-
     fig = go.Figure(
         data,
         layout=go.Layout(
@@ -249,20 +266,12 @@ def graph_mpdow():
         )
     )
 
-    fig.show()
+    html_file = open("res/htmls/mpdow.html", "r+")
+    html_file.truncate()
+    fig.write_html(html_file, auto_open=False)
+    html_file.close()
+    stat_file.close()
 
-def getKeyList(d):
-    keys = []
-    for key in d.keys():
-        keys.append(key)
-    return keys
-
-
-def getValueList(d):
-    values = []
-    for value in d.values():
-        values.append(value)
-    return values
 
 def addLists(x, y):
     if not len(x) == len(y):
@@ -274,6 +283,7 @@ def addLists(x, y):
             c.append(int(x[i]) + int(y[i]))
 
         return c
+
 
 def graph_mph():
     try:
@@ -323,8 +333,12 @@ def graph_mph():
         )
     )
 
-    fig.show()
+    html_file = open("res/htmls/mph.html", "r+")
+    html_file.truncate()
+    fig.write_html(html_file, auto_open=False)
+    html_file.close()
     stat_file.close()
+
 
 def graph_mpd():
     try:
@@ -339,7 +353,7 @@ def graph_mpd():
     for line in stat_file:
         stats = standarize_stat(0, 0, line)
         date = str(standarize_stat(0, 0, line)[0]) + "-" + str(standarize_stat(0, 0, line)[1]) + "-" + str(
-                    standarize_stat(0, 0, line)[2])
+            standarize_stat(0, 0, line)[2])
         user = str(stats[5])
 
         if user not in users:
@@ -375,13 +389,13 @@ def graph_mpd():
         )
     )
 
-    fig.show()
+    html_file = open("res/htmls/mpd.html", "r+")
+    html_file.truncate()
+    fig.write_html(html_file, auto_open=False)
+    html_file.close()
     stat_file.close()
 
-graph_mpdow()
-graph_mph()
-graph_mpd()
-# print(str(raw_char(clean_file)) + "\n" * 2)
+# print(str(raw_char(open("/Users/oleg/PycharmProjects/chatstat/ChatStat/res/clean.txt", "r"))) + "\n" * 2)
 # print(str(count_words(clean_file)) + "\n" * 2)
-# print(str(common_word(clean_file)) + "\n" * 2)
-# print(messages_per_user(open("/Users/oleg/PycharmProjects/chatstat/ChatStat/stat.txt", "r")))
+# print(str(common_word(open("/Users/oleg/PycharmProjects/chatstat/ChatStat/res/clean.txt", "r"))) + "\n" * 2)
+# print(messages_per_user(open("/Users/oleg/PycharmProjects/chatstat/ChatStat/res/stat.txt", "r")))
