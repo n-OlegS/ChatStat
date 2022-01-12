@@ -50,10 +50,10 @@ mpu = "Total words: " + str(count_words(open("res/clean.txt", "r")))
 print(colored(char, 'green'))
 print(colored(lines, 'green'))
 print(colored(mpu, 'green'))
-print(messages_per_user(open("res/stat.txt", "r")))
-print("See messages per weekday: file://" + os.path.abspath("res/htmls/mpdow.html"))
-print("See messages per date: file://" + os.path.abspath("res/htmls/mpd.html"))
-print("See messages per hour of day: file://" + os.path.abspath("res/htmls/mph.html"))
+print(colored(messages_per_user(open("res/stat.txt", "r")), 'cyan'))
+print(colored("See messages per weekday: file://" + os.path.abspath("res/htmls/mpdow.html"), 'magenta'))
+print(colored("See messages per date: file://" + os.path.abspath("res/htmls/mpd.html"), 'magenta'))
+print(colored("See messages per hour of day: file://" + os.path.abspath("res/htmls/mph.html"), 'magenta'))
 #UI end
 
 
