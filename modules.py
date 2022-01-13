@@ -2,6 +2,7 @@ import csv, datetime
 import plotly.graph_objs as go
 import os
 
+from termcolor import colored
 from emoji import UNICODE_EMOJI_ENGLISH
 
 
@@ -68,8 +69,8 @@ def gen_stat_file(data, final_stat_file):
                 stat_file_data[i] = final_line + "\n"
             except IndexError:
                 final_stat_file.write(str(final_line) + "\n")
-        #else:
-            #print("Rejected", str(i) + ":", final_line[:15] + "...")
+        # else:
+        # print("Rejected", str(i) + ":", final_line[:15] + "...")
 
         i += 1
 
@@ -114,22 +115,23 @@ def common_word(file):
     acc = ""
 
     for letter in text:
-        if letter in [" ", "\n", ".", ",", "!", ":", ')', '('] or letter in UNICODE_EMOJI_ENGLISH:
+        if letter in [" ", "\n", ".", ",", "!", ":", ')', '('] or letter in UNICODE_EMOJI_ENGLISH and acc not in [
+            'omitted>', '<Media']:
             add_word(acc)
             acc = ""
         else:
             acc += letter
 
-    max_count = 0
-    max_value = ''
+    words = dict(sorted(words.items(), key=lambda item: item[1]))
 
-    for i in range(len(words)):
-        key = list(words)[i]
+    print('Top 10 common words:\n')
 
-        if words[key] > max_count:
-            max_value = list(words)[i]
-            max_count = words[key]
-    return 'Word: ' + max_value + '\nCount: ' + str(max_count)
+    for i in range(10):
+        print(colored(
+            list(words.items())[len(words) - i - 1][0] + " : " + str(list(words.items())[len(words) - i - 1][1]),
+              'blue'))
+
+    print('\n')
 
 
 def search_word(file, s_word):
@@ -207,7 +209,7 @@ def messages_per_user(file):
     for key in getKeyList(mpu):
         out += str(key) + " : " + str(mpu[key]) + "\n"
 
-    return(out)
+    return (out)
 
 
 def write_csv():
