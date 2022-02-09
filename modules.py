@@ -5,7 +5,6 @@ import os
 from termcolor import colored
 from emoji import UNICODE_EMOJI_ENGLISH
 
-
 def getKeyList(d):
     keys = []
     for key in d.keys():
@@ -89,7 +88,7 @@ def count_lines(file):
     for _ in file.readlines():
         line_count += 1
 
-    return (line_count)
+    return line_count
 
 
 def count_words(file):
@@ -138,7 +137,6 @@ def search_word(file, s_word):
     text = file.read()
     return "Word: " + s_word + "\nAmount: " + str(text.count(s_word))
 
-
 def standarize_stat(file, line_num, inp_line):
     i = 0
 
@@ -152,6 +150,9 @@ def standarize_stat(file, line_num, inp_line):
             if i == line_num - 1:
                 line = line_check
             i += 1
+
+    if line == '' or not ('.' in line or '/' in line):
+        return []
 
     i = 0
     while line[i] not in [".", "/"]:
@@ -397,7 +398,3 @@ def graph_mpd():
     html_file.close()
     stat_file.close()
 
-# print(str(raw_char(open("/Users/oleg/PycharmProjects/chatstat/ChatStat/res/clean.txt", "r"))) + "\n" * 2)
-# print(str(count_words(clean_file)) + "\n" * 2)
-# print(str(common_word(open("/Users/oleg/PycharmProjects/chatstat/ChatStat/res/clean.txt", "r"))) + "\n" * 2)
-# print(messages_per_user(open("/Users/oleg/PycharmProjects/chatstat/ChatStat/res/stat.txt", "r")))
